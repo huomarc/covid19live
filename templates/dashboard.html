@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+{% block content %}
+<script>
+$(document).ready(function() {
+    $("#add_countries").click(function() {
+        $('.ui.modal').modal('show');
+    })
+
+    $('#save').click(function() {
+        var countries = $("#countries").val();
+        console.log(countries)
+        $.ajax({
+            url: '/state',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ "state": countries }),
+            dataType: 'json'
+        });
+        $('.ui.modal').modal('hide');
+    })
+});
+</script>
+<div>
+    <button id="add_countries" class="ui button">
+        Add Country (Case Sensitive)
+    </button>
+</div>
+<table class="ui celled table">
+    <thead>
+        <tr>
+            <th>Country ID</th>
+            <th>Country</th>
+            <th>Confirmed</th>
+            <th>Active</th>
+            <th>Deaths</th>
+            <th>Recovered</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for country in countries %}
+        <tr>
+            <td>{{country.id}}</td>
+            <td>{{country.state}}</td>
+            <td>{{country.confirmed}}</td>
+            <td>{{country.active}}</td>
+            <td>{{country.deaths}}</td>
+            <td>{{country.recovered}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="ui modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Add Country - Case Sensitive
+    </div>
+    <div class="content">
+        <div class="ui form">
+            <div class="field">
+                <label>Enter Countries</label>
+                <textarea id="countries"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="actions">
+        <div id="save" class="ui positive right labeled icon button">
+            Add Country
+            <i class="plus icon"></i>
+        </div>
+    </div>
+</div>
+{% endblock %}
